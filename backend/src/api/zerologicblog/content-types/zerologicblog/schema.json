@@ -1,0 +1,46 @@
+{
+  "kind": "collectionType",
+  "collectionName": "zerologicblogs",
+  "info": {
+    "singularName": "zerologicblog",
+    "pluralName": "zerologicblogs",
+    "displayName": "zerologicblog"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Title": {
+      "type": "string"
+    },
+    "Slug": {
+      "type": "uid",
+      "targetField": "Title"
+    },
+    "Content": {
+      "type": "blocks"
+    },
+    "Summary": {
+      "type": "text"
+    },
+    "Image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "Author": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "PublishedDate": {
+      "type": "datetime"
+    }
+  }
+}

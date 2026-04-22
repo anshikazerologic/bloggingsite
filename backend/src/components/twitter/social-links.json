@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_twitter_social_links",
+  "info": {
+    "displayName": "socialLinks",
+    "icon": "twitter"
+  },
+  "options": {},
+  "attributes": {
+    "twitter": {
+      "type": "string"
+    },
+    "linkedin": {
+      "type": "string"
+    },
+    "github": {
+      "type": "string"
+    },
+    "instagram": {
+      "type": "string"
+    },
+    "facebook": {
+      "type": "string"
+    }
+  },
+  "config": {}
+}
