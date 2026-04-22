@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { formatDate} from "../utils/helpers";
+import { formatDate } from "../utils/helpers";
 import { getCategoryColor } from "../api/api";
 
 function PostCard({ post }) {
@@ -25,26 +25,29 @@ function PostCard({ post }) {
         </div>
       )}
 
-    
+
       {coverImage && (
         <div className="h-32 overflow-hidden bg-gray-200">
           <img
-            src={`${import.meta.env.VITE_API_URL}${coverImage.url}`}
+            src={
+              coverImage?.url?.startsWith("http")
+                ? coverImage.url
+                : `${import.meta.env.VITE_API_URL}${coverImage.url}`
+            }
             alt={post.title}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
           />
         </div>
       )}
 
       <div className="p-3 flex flex-col grow pl-4">
-      
+
         <h2 className="text-base font-bold text-gray-900 mb-1 line-clamp-2 group-hover:text-gray-700 transition-colors">
           {post.title}
         </h2>
 
-      
 
-        
+
+
         {author && (
           <div className="flex items-center mb-2 pt-2 border-t border-gray-200">
             {author.avatar && (
