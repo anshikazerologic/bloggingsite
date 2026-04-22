@@ -35,7 +35,7 @@ function PostCard({ post }) {
                 : `${import.meta.env.VITE_API_URL}${coverImage.url}`
             }
             alt={post.title}
-          />
+            className="w-full h-full object-cover "/>
         </div>
       )}
 

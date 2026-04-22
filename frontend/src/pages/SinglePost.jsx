@@ -77,10 +77,15 @@ function SinglePost() {
         {coverImage && (
           <div className="mb-6 rounded-lg overflow-hidden shadow-md border border-gray-100">
             <img
-              src={`${import.meta.env.VITE_API_URL}${coverImage.url}`}
+              src={
+              coverImage?.url?.startsWith("http")
+                ? coverImage.url
+                : `${import.meta.env.VITE_API_URL}${coverImage.url}`
+            }
               alt={post.title}
               className="w-full h-48 md:h-64 object-cover"
             />
+            
           </div>
         )}
 
