@@ -93,8 +93,8 @@ export default function CategoryFilter({
                         setIsDropdownOpen(false);
                       }}
                       className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 ${selectedCategory === cat.id
-                          ? "bg-gray-100 font-semibold"
-                          : ""
+                        ? "bg-gray-100 font-semibold"
+                        : ""
                         }`}
                     >
                       {cat.name}
@@ -118,9 +118,13 @@ export default function CategoryFilter({
               >
 
                 <div className="flex items-center gap-2 mb-1">
-                  {post?.author?.avatar?.url?.startsWith("http") && (
+                  {post?.author?.avatar?.url && (
                     <img
-                      src={`${API_URL}${post?.author?.avatar?.url}`}
+                      src={
+                        post.author.avatar.url.startsWith("http")
+                          ? post.author.avatar.url
+                          : `${API_URL}${post.author.avatar.url}`
+                      }
                       className="w-5 h-5 rounded-full"
                       alt=""
                     />
