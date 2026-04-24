@@ -9,7 +9,7 @@ function App() {
 
         <Route path="/" element={<Home />} />
 
-        {/* ✅ IMPORTANT ROUTE */}
+       
         <Route path="/post/:slug" element={<SinglePost />} />
 
       </Routes>

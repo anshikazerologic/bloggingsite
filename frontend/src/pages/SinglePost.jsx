@@ -22,9 +22,7 @@ export default function SinglePost() {
 
   const storageKey = `read_time_${slug}`;
 
-  // -------------------------
-  // FETCH DATA
-  // -------------------------
+
   useEffect(() => {
     const load = async () => {
       setLoading(true);
@@ -45,9 +43,7 @@ export default function SinglePost() {
     load();
   }, [slug]);
 
-  // -------------------------
-  // TIMER
-  // -------------------------
+
   useEffect(() => {
     if (!post) return;
 
@@ -62,9 +58,7 @@ export default function SinglePost() {
     return () => clearInterval(interval);
   }, [post]);
 
-  // -------------------------
-  // SCROLL DETECTION
-  // -------------------------
+ 
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
@@ -88,9 +82,7 @@ export default function SinglePost() {
   const formatTime = (sec) =>
     `${Math.max(1, Math.floor(sec / 60))} min read`;
 
-  // -------------------------
-  // IMAGE FIX
-  // -------------------------
+ 
   const coverImage = post?.coverImage?.url?.startsWith("http")
     ? post.coverImage.url
     : `${API_URL}${post?.coverImage?.url || ""}`;
@@ -99,18 +91,14 @@ export default function SinglePost() {
     ? post.author.avatar.url
     : `${API_URL}${post?.author?.avatar?.url || ""}`;
 
-  // -------------------------
-  // RELATED POSTS
-  // -------------------------
+
   const relatedPosts = allPosts.filter(
     (p) =>
       p.category?.id === post?.category?.id &&
       p.slug !== post.slug
   );
 
-  // -------------------------
-  // LOADING
-  // -------------------------
+ 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -131,7 +119,7 @@ export default function SinglePost() {
     <div className="bg-white min-h-screen pb-24">
       <div className="max-w-6xl mx-auto px-6 py-8">
 
-        {/* BACK */}
+        
         <button
           onClick={() => navigate(-1)}
           className="flex items-center gap-2 mb-10 text-gray-500 hover:text-black"
@@ -140,12 +128,12 @@ export default function SinglePost() {
           Back
         </button>
 
-        {/* TITLE */}
+     
         <h1 className="text-4xl font-bold mb-4">
           {post.title}
         </h1>
 
-        {/* AUTHOR */}
+       
         <div className="flex items-center gap-3 mt-6">
           {avatar && (
             <img
@@ -159,7 +147,7 @@ export default function SinglePost() {
           </span>
         </div>
 
-        {/* META */}
+     
         <div className="flex justify-between border-y py-3 text-sm text-gray-500 mb-6">
           <span>{formatDate(post.publishedAt)}</span>
           <span className="text-black font-semibold">
@@ -167,7 +155,7 @@ export default function SinglePost() {
           </span>
         </div>
 
-        {/* CONTENT */}
+   
         <div className="max-w-3xl">
           {post.content?.map((block, i) => (
             <div key={i}>
@@ -175,11 +163,11 @@ export default function SinglePost() {
                 {block.children?.map((c) => c.text).join("")}
               </p>
 
-              {/* COVER IMAGE AFTER FIRST PARAGRAPH */}
+             
               {i === 0 && coverImage && (
                 <img
                   src={coverImage}
-                  className="w-full rounded-xl mb-8"
+                  className="w-full h-90 object-cover rounded-xl mb-8"
                   alt="cover"
                 />
               )}
@@ -187,7 +175,7 @@ export default function SinglePost() {
           ))}
         </div>
 
-        {/* RELATED POSTS */}
+        
         {relatedPosts.length > 0 && (
           <div className="mt-16">
             <h2 className="text-2xl font-bold mb-6">
@@ -203,11 +191,7 @@ export default function SinglePost() {
         )}
       </div>
 
-      {/* =========================
-          BACK TO TOP BUTTONS
-      ========================= */}
-
-      {/* FLOATING BUTTON (SCROLLING) */}
+   
       {showTopBtn && !isBottom && (
         <button
           onClick={scrollToTop}
@@ -217,7 +201,7 @@ export default function SinglePost() {
         </button>
       )}
 
-      {/* CENTER BUTTON (BOTTOM REACHED OR END CONTENT) */}
+   
       {isBottom && (
         <div className="fixed bottom-10 left-1/2 -translate-x-1/2">
           <button

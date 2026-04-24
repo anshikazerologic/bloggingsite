@@ -4,7 +4,7 @@ import { Search, ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export default function CategoryFilter({
- 
+
   posts = [],
   onSelect,
   selectedCategory
@@ -13,12 +13,10 @@ export default function CategoryFilter({
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
-   const navigate = useNavigate();
+  const navigate = useNavigate();
   const API_URL = import.meta.env.VITE_API_URL || "";
 
-  // =========================
-  // LOAD CATEGORIES
-  // =========================
+
   useEffect(() => {
     const load = async () => {
       const data = await fetchCategories();
@@ -32,9 +30,7 @@ export default function CategoryFilter({
     load();
   }, []);
 
-  // =========================
-  // FILTER POSTS
-  // =========================
+
   const filteredPosts = posts.filter((post) => {
     const matchCategory = selectedCategory
       ? String(post?.category?.id) === String(selectedCategory)
@@ -54,7 +50,7 @@ export default function CategoryFilter({
   return (
     <div className="w-full max-w-[400px] flex flex-col gap-6">
 
-      {/* SEARCH */}
+
       <div className="relative ">
         <Search className="absolute left-4 top-4 w-5 h-5 text-gray-400" />
         <input
@@ -65,10 +61,10 @@ export default function CategoryFilter({
         />
       </div>
 
-      {/* CATEGORY CARD */}
+
       <div className="bg-[#F2F2F2] rounded-[24px] border border-gray-400/50 overflow-hidden">
 
-        {/* HEADER */}
+
         <div className="p-6 flex items-center justify-between border-b border-black">
           <h2 className="text-[20px] font-bold">Category</h2>
 
@@ -96,11 +92,10 @@ export default function CategoryFilter({
                         onSelect(cat.id);
                         setIsDropdownOpen(false);
                       }}
-                      className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 ${
-                        selectedCategory === cat.id
+                      className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 ${selectedCategory === cat.id
                           ? "bg-gray-100 font-semibold"
                           : ""
-                      }`}
+                        }`}
                     >
                       {cat.name}
                     </button>
@@ -111,10 +106,8 @@ export default function CategoryFilter({
           </div>
         </div>
 
-        {/* =========================
-            FIXED HEIGHT + SCROLL AREA
-        ========================== */}
-        <div className="flex flex-col lg:h-[calc(100vh-220px)] lg:overflow-y-auto">
+
+        <div className="flex flex-col lg:h-[calc(100vh-220px)] lg:overflow-y-auto no-scrollbar">
 
           {filteredPosts.length > 0 ? (
             filteredPosts.map((post) => (
@@ -123,11 +116,11 @@ export default function CategoryFilter({
                 onClick={() => navigate(`/post/${post.slug}`)}
                 className="p-6 border-b border-gray-400/50 hover:bg-black/5 transition"
               >
-                {/* AUTHOR */}
+
                 <div className="flex items-center gap-2 mb-1">
-                  {post?.author?.avatar?.url && (
+                  {post?.author?.avatar?.url?.startsWith("http") && (
                     <img
-                      src={`${API_URL}${post.author.avatar.url}`}
+                      src={`${API_URL}${post?.author?.avatar?.url}`}
                       className="w-5 h-5 rounded-full"
                       alt=""
                     />
@@ -137,7 +130,7 @@ export default function CategoryFilter({
                   </span>
                 </div>
 
-                {/* TITLE */}
+
                 <h3 className="text-[15px] font-semibold line-clamp-2">
                   {post.title}
                 </h3>

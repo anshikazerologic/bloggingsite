@@ -13,9 +13,7 @@ function Home() {
 
   const [selectedCategory, setSelectedCategory] = useState(null);
 
-  // -----------------------------
-  // DEVICE DETECTION
-  // -----------------------------
+ 
   useEffect(() => {
     const checkDevice = () => {
       setIsMobileOrTablet(window.innerWidth < 1024);
@@ -27,9 +25,6 @@ function Home() {
     return () => window.removeEventListener("resize", checkDevice);
   }, []);
 
-  // -----------------------------
-  // FETCH POSTS
-  // -----------------------------
   useEffect(() => {
     const load = async () => {
       setLoading(true);
@@ -41,9 +36,7 @@ function Home() {
     load();
   }, []);
 
-  // -----------------------------
-  // FILTER LOGIC
-  // -----------------------------
+
   const filteredPosts =
     isMobileOrTablet && searchQuery.trim()
       ? posts.filter((post) =>
@@ -57,14 +50,14 @@ function Home() {
 
       <div className="max-w-6xl mx-auto px-4 py-6 flex flex-col lg:flex-row gap-6">
 
-        {/* LEFT SIDE (POSTS) */}
+        
         <div className="flex-1">
 
-          {/* MOBILE/TABLET SEARCH (HIDDEN ON LG+) */}
+         
           {isMobileOrTablet && (
             <div className="relative lg:hidden sticky top-0 z-10 bg-gray-50 py-3">
               
-              {/* SEARCH ICON */}
+             
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
 
               <input
@@ -76,7 +69,7 @@ function Home() {
             </div>
           )}
 
-          {/* POSTS */}
+       
           <div className="space-y-4 lg:space-y-6 mt-4 lg:mt-0">
 
             {loading ? (
@@ -97,7 +90,7 @@ function Home() {
 
         </div>
 
-        {/* RIGHT SIDE (CATEGORY - DESKTOP ONLY) */}
+        
         <div className="hidden lg:block w-[320px] sticky top-6 h-[calc(100vh-40px)] overflow-hidden">
           <CategoryFilter
             posts={posts}
