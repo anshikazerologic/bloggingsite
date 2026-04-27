@@ -33,7 +33,7 @@ export default function HeroSection({ post }) {
             </span>
           </div>
 
-          <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold line-clamp-3 text-white mb-4 leading-tight">
             {post.title}
           </h1>
 
