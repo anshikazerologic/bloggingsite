@@ -48,7 +48,7 @@ export default function CategoryFilter({
     "Select Category";
 
   return (
-    <div className="w-full max-w-[400px] flex flex-col gap-6">
+    <div className="w-full max-w-100 flex flex-col gap-6">
 
 
       <div className="relative ">
@@ -62,7 +62,7 @@ export default function CategoryFilter({
       </div>
 
 
-      <div className="bg-[#F2F2F2] rounded-[24px] border border-gray-400/50 overflow-hidden">
+      <div className="bg-[#F2F2F2] rounded-3xl border border-gray-400/50 overflow-hidden">
 
 
         <div className="p-6 flex items-center justify-between border-b border-black">

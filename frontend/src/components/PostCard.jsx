@@ -1,7 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import { formatDate } from "../utils/helpers";
-import { getCategoryColor } from "../api/api";
-import { MessageCircle } from "lucide-react";
 
 export default function PostCard({ post }) {
   const navigate = useNavigate();
@@ -32,7 +30,6 @@ export default function PostCard({ post }) {
       )}
 
       <div className="p-4 flex flex-col flex-1">
-        
         <div className="flex items-center gap-2 mb-3">
           {category?.icon && (
             <img
@@ -47,25 +44,21 @@ export default function PostCard({ post }) {
           </span>
         </div>
 
-        
         <h2
           onClick={() => navigate(`/post/${post.slug}`)}
-          className="text-lg font-bold text-gray-900  leading-snug line-clamp-2 h-14 group-hover:text-gray-700 transition-colors"
+          className="text-lg font-bold text-gray-900 leading-snug line-clamp-2 h-12 group-hover:text-gray-700 transition-colors"
         >
-          <span className="border-b-2 border-transparent line-clamp-2 group-hover:border-gray-900 transition-all">
+          <span className="border-b-2 border-transparent group-hover:border-gray-900 transition-all">
             {post.title}
           </span>
         </h2>
 
-        <div className="flex-1" />
+        <div className="flex-1 pt-4" />
 
         <div className="flex items-center justify-between text-sm text-gray-500">
           <span className="font-medium">By {author?.name || "Anonymous"}</span>
           <span>{formatDate(post.publishedAt)}</span>
         </div>
-
-     
-       
       </div>
     </div>
   );

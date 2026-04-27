@@ -5,8 +5,6 @@ import { formatDate } from "../utils/helpers";
 import { ArrowLeft, ArrowUp } from "lucide-react";
 import PostCard from "../components/PostCard";
 
-const API_URL = import.meta.env.VITE_API_URL || "";
-
 export default function SinglePost() {
   const { slug } = useParams();
   const navigate = useNavigate();
@@ -58,7 +56,6 @@ export default function SinglePost() {
     return () => clearInterval(interval);
   }, [post]);
 
- 
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
@@ -82,23 +79,19 @@ export default function SinglePost() {
   const formatTime = (sec) =>
     `${Math.max(1, Math.floor(sec / 60))} min read`;
 
- 
   const coverImage = post?.coverImage?.url?.startsWith("http")
     ? post.coverImage.url
-    : `${API_URL}${post?.coverImage?.url || ""}`;
+    : `${import.meta.env.VITE_API_URL}${post?.coverImage?.url || ""}`;
 
   const avatar = post?.author?.avatar?.url?.startsWith("http")
     ? post.author.avatar.url
-    : `${API_URL}${post?.author?.avatar?.url || ""}`;
-
+    : `${import.meta.env.VITE_API_URL}${post?.author?.avatar?.url || ""}`;
 
   const relatedPosts = allPosts.filter(
     (p) =>
       p.category?.id === post?.category?.id &&
       p.slug !== post.slug
   );
-
- 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -116,92 +109,133 @@ export default function SinglePost() {
   }
 
   return (
-    <div className="bg-white min-h-screen pb-24">
-      <div className="max-w-6xl mx-auto px-6 py-8">
+    <div className="bg-white min-h-screen">
+      <article className="max-w-3xl mx-auto px-4 md:px-6 py-12 md:py-16">
 
-        
+
         <button
           onClick={() => navigate(-1)}
-          className="flex items-center gap-2 mb-10 text-gray-500 hover:text-black"
+          className="flex items-center gap-2 mb-12 text-gray-600 hover:text-black transition-colors group"
         >
-          <ArrowLeft size={18} />
-          Back
+          <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
+          <span className="font-medium">Back</span>
         </button>
 
-     
-        <h1 className="text-4xl font-bold mb-4">
-          {post.title}
-        </h1>
 
-       
-        <div className="flex items-center gap-3 mt-6">
-          {avatar && (
-            <img
-              src={avatar}
-              className="w-10 h-10 rounded-full object-cover"
-              alt="author"
-            />
-          )}
-          <span className="text-gray-700 font-medium">
-            {post.author?.name}
-          </span>
-        </div>
+        <header className="mb-12">
 
-     
-        <div className="flex justify-between border-y py-3 text-sm text-gray-500 mb-6">
-          <span>{formatDate(post.publishedAt)}</span>
-          <span className="text-black font-semibold">
-            {formatTime(seconds)}
-          </span>
-        </div>
+          <div className="mb-4">
+            <span className="inline-block bg-black text-white px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wide">
+              {post.category?.name || "Article"}
+            </span>
+          </div>
 
-   
-        <div className="max-w-3xl">
-          {post.content?.map((block, i) => (
-            <div key={i}>
-              <p className="text-gray-700 text-lg leading-relaxed mb-6">
-                {block.children?.map((c) => c.text).join("")}
-              </p>
 
-             
-              {i === 0 && coverImage && (
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+            {post.title}
+          </h1>
+
+
+          <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6 pt-6 border-t border-gray-200">
+            <div className="flex items-center gap-3">
+              {avatar && (
                 <img
-                  src={coverImage}
-                  className="w-full h-90 object-cover rounded-xl mb-8"
-                  alt="cover"
+                  src={avatar}
+                  className="w-12 h-12 rounded-full object-cover"
+                  alt="author"
                 />
               )}
+              <div>
+                <p className="font-semibold text-gray-900">
+                  {post.author?.name}
+                </p>
+                <p className="text-sm text-gray-600">
+                  {formatDate(post.publishedAt)}
+                </p>
+              </div>
             </div>
+            <span className="text-gray-600 font-semibold md:ml-auto">
+              {formatTime(seconds)}
+            </span>
+          </div>
+        </header>
+
+
+        {coverImage && (
+          <div className="mb-12 rounded-xl overflow-hidden h-64 md:h-105">
+            <img
+              src={coverImage}
+              className="w-full h-full object-cover"
+              alt="cover"
+            />
+          </div>
+        )}
+
+
+        <div className="prose prose-lg max-w-none mb-16">
+          {post.content?.map((block, i) => (
+            <p key={i} className="text-gray-800 text-lg leading-relaxed mb-6">
+              {block.children?.map((c) => c.text).join("")}
+            </p>
           ))}
         </div>
 
-        
-        {relatedPosts.length > 0 && (
-          <div className="mt-16">
-            <h2 className="text-2xl font-bold mb-6">
-              Related Posts
-            </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {relatedPosts.map((p) => (
+        <div className="border-t border-gray-200 my-12" />
+
+
+        <div className="mb-16 p-6 bg-gray-50 rounded-lg">
+          <div className="flex items-start gap-4">
+            {avatar && (
+              <img
+                src={avatar}
+                className="w-16 h-16 rounded-full object-cover shrink-0"
+                alt="author"
+              />
+            )}
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-2">
+                About {post.author?.name}
+              </h3>
+              <p className="text-gray-600 text-sm">
+                Writer and content creator sharing thoughts on technology, design, and life.
+              </p>
+            </div>
+          </div>
+        </div>
+
+
+        {relatedPosts.length > 0 && (
+          <section>
+            <div className="mb-8">
+              <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                More from {post.category?.name}
+              </h2>
+              <p className="text-gray-600">
+                Continue exploring related articles
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {relatedPosts.slice(0, 6).map((p) => (
                 <PostCard key={p.id} post={p} />
               ))}
             </div>
-          </div>
+          </section>
         )}
-      </div>
+      </article>
 
-   
+
       {showTopBtn && !isBottom && (
         <button
           onClick={scrollToTop}
           className="fixed bottom-6 right-6 bg-black text-white p-3 rounded-full shadow-lg hover:scale-105 transition"
+          aria-label="Back to top"
         >
           <ArrowUp size={18} />
         </button>
       )}
 
-   
       {isBottom && (
         <div className="fixed bottom-10 left-1/2 -translate-x-1/2">
           <button

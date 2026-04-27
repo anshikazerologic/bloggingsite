@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { fetchPosts } from "../api/api";
 import PostCard from "../components/PostCard";
 import Header from "../components/Header";
+import HeroSection from "../components/HeroSection";
+import FeaturedGrid from "../components/FeaturedGrid";
 
 function Home() {
   const [posts, setPosts] = useState([]);
@@ -20,7 +22,6 @@ function Home() {
     load();
   }, []);
 
-  // Filter posts based on category and search query
   const filteredPosts = posts.filter((post) => {
     const matchCategory = selectedCategory
       ? String(post?.category?.id) === String(selectedCategory)
@@ -33,27 +34,53 @@ function Home() {
     return matchCategory && matchSearch;
   });
 
+  const showHero = !selectedCategory && !searchQuery;
+  const heroPost = showHero && posts.length > 0 ? posts[0] : null;
+
+  const remainingPosts = showHero ? posts.slice(1) : filteredPosts;
+  const featuredPosts = remainingPosts.slice(0, 6);
+  const latestPosts = remainingPosts.slice(6);
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header with Categories and Search */}
+    <div className="min-h-screen bg-white">
       <Header
         selectedCategory={selectedCategory}
         onSelectCategory={setSelectedCategory}
         onSearch={setSearchQuery}
       />
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <main className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-12">
         {loading ? (
           <div className="flex justify-center items-center py-12">
             <p className="text-gray-500">Loading...</p>
           </div>
         ) : filteredPosts.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {filteredPosts.map((post) => (
-              <PostCard key={post.id} post={post} />
-            ))}
-          </div>
+          <>
+            {heroPost && <HeroSection post={heroPost} />}
+
+            {featuredPosts.length > 0 && (
+              <FeaturedGrid 
+                posts={featuredPosts} 
+                title={showHero ? "Featured Stories" : "Stories"}
+              />
+            )}
+
+            {latestPosts.length > 0 && (
+              <section>
+                <div className="mb-8">
+                  <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+                    Latest Posts
+                  </h2>
+                  <div className="w-12 h-1 bg-black rounded-full mt-3" />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {latestPosts.map((post) => (
+                    <PostCard key={post.id} post={post} />
+                  ))}
+                </div>
+              </section>
+            )}
+          </>
         ) : (
           <div className="flex flex-col items-center justify-center py-12 text-center">
             <p className="text-gray-500 text-lg font-medium">
@@ -64,7 +91,7 @@ function Home() {
             </p>
           </div>
         )}
-      </div>
+      </main>
     </div>
   );
 }
