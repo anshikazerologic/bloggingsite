@@ -24,12 +24,7 @@
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
   }
 
-  .gradient-text {
-    background: linear-gradient(135deg, #111827 0%, #6B7280 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
+
 
  
   .transition-premium {
@@ -45,11 +40,20 @@
   .backdrop-blur-premium {
     backdrop-filter: blur(10px);
   }
+  
+@font-face {
+  font-family: 'Gilroy';
+  src: url('../public/font/fonnts.com-Gilroy-Medium.ttf') ;
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
 
   
   html {
     scroll-behavior: smooth;
-    font-family:Georgia, 'Times New Roman', Times, serif;
+    font-family:'Gilroy';
   }
 
   

@@ -1,29 +1,13 @@
 import { useEffect, useState } from "react";
 import { fetchPosts } from "../api/api";
 import PostCard from "../components/PostCard";
-import CategoryFilter from "../components/CategoryFilter";
-import { Search } from "lucide-react";
+import Header from "../components/Header";
 
 function Home() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const [searchQuery, setSearchQuery] = useState("");
-  const [isMobileOrTablet, setIsMobileOrTablet] = useState(false);
-
   const [selectedCategory, setSelectedCategory] = useState(null);
-
- 
-  useEffect(() => {
-    const checkDevice = () => {
-      setIsMobileOrTablet(window.innerWidth < 1024);
-    };
-
-    checkDevice();
-    window.addEventListener("resize", checkDevice);
-
-    return () => window.removeEventListener("resize", checkDevice);
-  }, []);
 
   useEffect(() => {
     const load = async () => {
@@ -36,69 +20,50 @@ function Home() {
     load();
   }, []);
 
+  // Filter posts based on category and search query
+  const filteredPosts = posts.filter((post) => {
+    const matchCategory = selectedCategory
+      ? String(post?.category?.id) === String(selectedCategory)
+      : true;
 
-  const filteredPosts =
-    isMobileOrTablet && searchQuery.trim()
-      ? posts.filter((post) =>
-          post?.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          post?.author?.name?.toLowerCase().includes(searchQuery.toLowerCase())
-        )
-      : posts;
+    const matchSearch =
+      post?.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      post?.author?.name?.toLowerCase().includes(searchQuery.toLowerCase());
+
+    return matchCategory && matchSearch;
+  });
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Header with Categories and Search */}
+      <Header
+        selectedCategory={selectedCategory}
+        onSelectCategory={setSelectedCategory}
+        onSearch={setSearchQuery}
+      />
 
-      <div className="max-w-6xl mx-auto px-4 py-6 flex flex-col lg:flex-row gap-6">
-
-        
-        <div className="flex-1">
-
-         
-          {isMobileOrTablet && (
-            <div className="relative lg:hidden sticky top-0 z-10 bg-gray-50 py-3">
-              
-             
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-
-              <input
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search posts..."
-                className="w-full bg-white border rounded-full py-3 pl-10 pr-4 text-sm shadow-sm focus:outline-none"
-              />
-            </div>
-          )}
-
-       
-          <div className="space-y-4 lg:space-y-6 mt-4 lg:mt-0">
-
-            {loading ? (
-              <p className="text-gray-500">Loading...</p>
-            ) : filteredPosts.length > 0 ? (
-              filteredPosts.map((post) => (
-                <PostCard key={post.id} post={post} />
-              ))
-            ) : (
-              <div className="flex flex-col items-center justify-center py-12 text-center">
-                <p className="text-gray-500 text-sm font-medium">
-                  No posts yet
-                </p>
-              </div>
-            )}
-
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        {loading ? (
+          <div className="flex justify-center items-center py-12">
+            <p className="text-gray-500">Loading...</p>
           </div>
-
-        </div>
-
-        
-        <div className="hidden lg:block w-[320px] sticky top-6 h-[calc(100vh-40px)] overflow-hidden">
-          <CategoryFilter
-            posts={posts}
-            selectedCategory={selectedCategory}
-            onSelect={setSelectedCategory}
-          />
-        </div>
-
+        ) : filteredPosts.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {filteredPosts.map((post) => (
+              <PostCard key={post.id} post={post} />
+            ))}
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center py-12 text-center">
+            <p className="text-gray-500 text-lg font-medium">
+              No posts found
+            </p>
+            <p className="text-gray-400 text-sm mt-1">
+              Try adjusting your search or category filter
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
