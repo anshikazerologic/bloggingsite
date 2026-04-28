@@ -4,6 +4,7 @@ import { fetchPostBySlug, fetchPosts } from "../api/api";
 import { formatDate } from "../utils/helpers";
 import { ArrowLeft, ArrowUp } from "lucide-react";
 import PostCard from "../components/PostCard";
+import RichTextRenderer from "../components/RichTextRenderer";
 
 export default function SinglePost() {
   const { slug } = useParams();
@@ -171,15 +172,7 @@ export default function SinglePost() {
           </div>
         )}
 
-
-        <div className="prose prose-lg max-w-none mb-16">
-          {post.content?.map((block, i) => (
-            <p key={i} className="text-gray-800 text-lg leading-relaxed mb-6">
-              {block.children?.map((c) => c.text).join("")}
-            </p>
-          ))}
-        </div>
-
+        <RichTextRenderer content={post.content} />
 
         <div className="border-t border-gray-200 my-12" />
 
