@@ -1,8 +1,12 @@
 export default function RichTextRenderer({ content }) {
   if (!content) return null;
 
+  
   const renderChildren = (children = []) =>
     children.map((child, i) => {
+      if (!child) return null;
+
+    
       if (child.type === "link") {
         return (
           <a
@@ -12,7 +16,7 @@ export default function RichTextRenderer({ content }) {
             rel="noopener noreferrer"
             className="text-blue-600 underline hover:text-blue-800"
           >
-            {renderChildren(child.children)}
+            {renderChildren(child.children || [])}
           </a>
         );
       }
@@ -29,47 +33,48 @@ export default function RichTextRenderer({ content }) {
         return <span key={i}>{text}</span>;
       }
 
+     
+      if (child.children) {
+        return (
+          <span key={i}>
+            {renderChildren(child.children)}
+          </span>
+        );
+      }
+
       return null;
     });
 
   return (
     <div className="prose prose-lg max-w-none mb-16">
       {content.map((block, i) => {
-        
-        const isEmpty =
+        if (!block) return null;
+
+       
+        const isEmptyParagraph =
+          block.type === "paragraph" &&
           block.children?.every(
             (c) => !c.text || c.text.trim() === ""
           );
 
-      
-        if (isEmpty && block.type !== "image") return null;
+        if (isEmptyParagraph) return null;
 
         switch (block.type) {
-        
+         
           case "heading": {
-            const level = Math.min(Math.max(block.level || 2, 1), 6);
-            const Tag = `h${level}`;
-
-            const sizes = {
-              1: "text-4xl font-bold",
-              2: "text-3xl font-bold",
-              3: "text-2xl font-semibold",
-              4: "text-xl font-semibold",
-              5: "text-lg font-semibold",
-              6: "text-base font-semibold",
-            };
+            const Tag = `h${block.level || 2}`;
 
             return (
               <Tag
                 key={i}
-                className={`mt-8 mb-4 text-gray-900 ${sizes[level]}`}
+                className="mt-8 mb-4 font-bold text-gray-900"
               >
                 {renderChildren(block.children)}
               </Tag>
             );
           }
 
-         
+        
           case "paragraph":
             return (
               <p
@@ -92,8 +97,19 @@ export default function RichTextRenderer({ content }) {
                   isOrdered ? "list-decimal" : "list-disc"
                 }`}
               >
-                {block.children.map((item, j) => {
-                  const isEmptyItem = item.children?.every(
+                {block.children?.map((item, j) => {
+                  if (!item) return null;
+
+                  
+                  let content = [];
+
+                  if (item.children?.[0]?.type === "text") {
+                    content = item.children;
+                  } else if (item.children?.[0]?.children) {
+                    content = item.children[0].children;
+                  }
+
+                  const isEmptyItem = content.every(
                     (c) => !c.text || c.text.trim() === ""
                   );
 
@@ -104,7 +120,7 @@ export default function RichTextRenderer({ content }) {
                       key={j}
                       className="mb-2 text-gray-800 text-lg"
                     >
-                      {renderChildren(item.children)}
+                      {renderChildren(content)}
                     </li>
                   );
                 })}
